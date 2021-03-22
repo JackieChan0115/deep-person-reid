@@ -4,6 +4,7 @@ import os.path as osp
 import argparse
 import torch
 import torch.nn as nn
+import os
 
 import torchreid
 from torchreid.utils import (
@@ -115,6 +116,9 @@ def main():
         '--config-file', type=str, default='', help='path to config file'
     )
     parser.add_argument(
+        '--gpu', type=str, default='3', help='the used gpus, exp. 1,2'
+    )
+    parser.add_argument(
         '-s',
         '--sources',
         type=str,
@@ -161,6 +165,7 @@ def main():
     print('** System info **\n{}\n'.format(collect_env_info()))
 
     if cfg.use_gpu:
+        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
         torch.backends.cudnn.benchmark = True
 
     datamanager = build_datamanager(cfg)
