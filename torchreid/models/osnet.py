@@ -449,30 +449,31 @@ def init_pretrained_weights(model, key=''):
     from collections import OrderedDict
 
     def _get_torch_home():
-        ENV_TORCH_HOME = 'TORCH_HOME'
-        ENV_XDG_CACHE_HOME = 'XDG_CACHE_HOME'
-        DEFAULT_CACHE_DIR = '~/.cache'
-        torch_home = os.path.expanduser(
-            os.getenv(
-                ENV_TORCH_HOME,
-                os.path.join(
-                    os.getenv(ENV_XDG_CACHE_HOME, DEFAULT_CACHE_DIR), 'torch'
-                )
-            )
-        )
-        return torch_home
+        # ENV_TORCH_HOME = 'TORCH_HOME'
+        # ENV_XDG_CACHE_HOME = 'XDG_CACHE_HOME'
+        # DEFAULT_CACHE_DIR = '~/.cache'
+        # torch_home = os.path.expanduser(
+        #     os.getenv(
+        #         ENV_TORCH_HOME,
+        #         os.path.join(
+        #             os.getenv(ENV_XDG_CACHE_HOME, DEFAULT_CACHE_DIR), 'torch'
+        #         )
+        #     )
+        # )
+        # return torch_home
+        return "/home/jiayansong/projects/songer/github/deep-person-reid/"
 
     torch_home = _get_torch_home()
     model_dir = os.path.join(torch_home, 'checkpoints')
-    try:
-        os.makedirs(model_dir)
-    except OSError as e:
-        if e.errno == errno.EEXIST:
-            # Directory already exists, ignore.
-            pass
-        else:
-            # Unexpected OSError, re-raise.
-            raise
+    # try:
+    #     os.makedirs(model_dir)
+    # except OSError as e:
+    #     if e.errno == errno.EEXIST:
+    #         # Directory already exists, ignore.
+    #         pass
+    #     else:
+    #         # Unexpected OSError, re-raise.
+    #         raise
     filename = key + '_imagenet.pth'
     cached_file = os.path.join(model_dir, filename)
 
