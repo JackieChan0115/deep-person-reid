@@ -113,7 +113,7 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
-        '--config-file', type=str, default='', help='path to config file'
+        '--config-file', type=str, default='configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml', help='path to config file'
     )
     parser.add_argument(
         '--gpu', type=str, default='3', help='the used gpus, exp. 1,2'
@@ -166,6 +166,7 @@ def main():
 
     if cfg.use_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+        print(os.environ['CUDA_VISIBLE_DEVICES'])
         torch.backends.cudnn.benchmark = True
 
     datamanager = build_datamanager(cfg)
@@ -187,7 +188,8 @@ def main():
         load_pretrained_weights(model, cfg.model.load_weights)
 
     if cfg.use_gpu:
-        model = nn.DataParallel(model).cuda()
+        # model = nn.DataParallel(model).cuda()
+        model = model.cuda()
 
     optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(cfg))
     scheduler = torchreid.optim.build_lr_scheduler(
