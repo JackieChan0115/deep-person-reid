@@ -7,7 +7,7 @@ def get_default_config():
     # model
     cfg.model = CN()
     cfg.model.name = 'resnet50'
-    cfg.model.pretrained = True # automatically load pretrained model weights if available
+    cfg.model.pretrained = False # automatically load pretrained model weights if available
     cfg.model.load_weights = '' # path to model weights
     cfg.model.resume = '' # path to checkpoint for resume training
 

@@ -78,12 +78,25 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
 
 
 def reset_config(cfg, args):
-    if args.root:
-        cfg.data.root = args.root
-    if args.sources:
-        cfg.data.sources = args.sources
-    if args.targets:
-        cfg.data.targets = args.targets
+    # if args.root:
+    #     cfg.data.root = args.root
+    # if args.sources:
+    #     cfg.data.sources = args.sources
+    # if args.targets:
+    #     cfg.data.targets = args.targets
+
+    dataset_dict = {
+        "market1501":{
+            "root":"/home/jiayansong/Dataset/",
+            "targets":"market1501"
+        }
+    }
+
+    index = args.root # 使用的数据库名称
+    cfg.data.root = dataset_dict[index]["root"]
+    cfg.data.targets = dataset_dict[index]["targets"]
+    cfg.data.sources = index
+
     if args.transforms:
         cfg.data.transforms = args.transforms
 
@@ -119,8 +132,9 @@ def main():
         '--transforms', type=str, nargs='+', help='data augmentation'
     )
     parser.add_argument(
-        '--root', type=str, default='', help='path to data root'
+        '--root', type=str, default='market1501', help='path to data root'
     )
+
     parser.add_argument(
         'opts',
         default=None,
