@@ -188,8 +188,7 @@ def main():
         load_pretrained_weights(model, cfg.model.load_weights)
 
     if cfg.use_gpu:
-        # model = nn.DataParallel(model).cuda()
-        model = model.cuda()
+        model = nn.DataParallel(model).cuda()
 
     optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(cfg))
     scheduler = torchreid.optim.build_lr_scheduler(
