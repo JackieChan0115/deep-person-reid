@@ -11,6 +11,7 @@ import warnings
 import PIL
 import torch
 from PIL import Image
+import cv2
 
 __all__ = [
     'mkdir_if_missing', 'check_isfile', 'read_json', 'write_json',
@@ -108,7 +109,8 @@ def read_image(path):
         raise IOError('"{}" does not exist'.format(path))
     while not got_img:
         try:
-            img = Image.open(path).convert('RGB')
+            img = cv2.imread(path)
+            # img = Image.open(path).convert('RGB')
             got_img = True
         except IOError:
             print(
