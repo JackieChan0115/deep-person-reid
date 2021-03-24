@@ -148,7 +148,7 @@ def main():
     args = parser.parse_args()
 
     cfg = get_default_config()
-    cfg.use_gpu = torch.cuda.is_available()
+    cfg.use_gpu = True
     if args.config_file:
         cfg.merge_from_file(args.config_file)
     reset_config(cfg, args)
@@ -166,7 +166,7 @@ def main():
 
     if cfg.use_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
-        print(os.environ['CUDA_VISIBLE_DEVICES'])
+        print('CUDA_VISIBLE_DEVICES', os.environ['CUDA_VISIBLE_DEVICES'])
         torch.backends.cudnn.benchmark = True
 
     datamanager = build_datamanager(cfg)
@@ -188,7 +188,8 @@ def main():
         load_pretrained_weights(model, cfg.model.load_weights)
 
     if cfg.use_gpu:
-        model = nn.DataParallel(model).cuda()
+        # model = nn.DataParallel(model).cuda()
+        model = model.cuda()
 
     optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(cfg))
     scheduler = torchreid.optim.build_lr_scheduler(
