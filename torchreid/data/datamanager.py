@@ -3,7 +3,8 @@ import torch
 
 from torchreid.data.sampler import build_train_sampler
 from torchreid.data.datasets import init_image_dataset, init_video_dataset
-from torchreid.data.transforms import build_transforms
+# from torchreid.data.transforms import build_transforms
+from torchreid.data.preprocessing import ValTransform, MultiTransform
 
 
 class DataManager(object):
@@ -50,13 +51,18 @@ class DataManager(object):
         if isinstance(self.targets, str):
             self.targets = [self.targets]
 
-        self.transform_tr, self.transform_te = build_transforms(
-            self.height,
-            self.width,
-            transforms=transforms,
-            norm_mean=norm_mean,
-            norm_std=norm_std
-        )
+        transform_dict = {
+            "INPUTSIZE":(128, 256),
+            "make_zero":False,
+            "make_first":True,
+            "make_sincurl_pic":True,
+            "make_floodfill_pic":True,
+            "MAX_EPOCHS":200, # 这两个参数在这个项目工程中是无用的
+            "WARMUP_EPOCHS":15
+        }
+
+        self.transform_tr = MultiTransform(transform_dict)
+        self.transform_te = ValTransform(transform_dict)
 
         self.use_gpu = (torch.cuda.is_available() and use_gpu)
 
