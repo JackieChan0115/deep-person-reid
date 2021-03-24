@@ -51,18 +51,10 @@ class DataManager(object):
         if isinstance(self.targets, str):
             self.targets = [self.targets]
 
-        transform_dict = {
-            "INPUTSIZE":(128, 256),
-            "make_zero":False,
-            "make_first":True,
-            "make_sincurl_pic":True,
-            "make_floodfill_pic":True,
-            "MAX_EPOCHS":200, # 这两个参数在这个项目工程中是无用的
-            "WARMUP_EPOCHS":15
-        }
+        transform_params = TransformParams()
 
-        self.transform_tr = MultiTransform(transform_dict)
-        self.transform_te = ValTransform(transform_dict)
+        self.transform_tr = MultiTransform(transform_params)
+        self.transform_te = ValTransform(transform_params)
 
         self.use_gpu = (torch.cuda.is_available() and use_gpu)
 
@@ -558,3 +550,15 @@ class VideoDataManager(DataManager):
         print('  target             : {}'.format(self.targets))
         print('  *****************************************')
         print('\n')
+
+
+class TransformParams(object):
+
+    def __init__(self):
+        self.INPUTSIZE = (128, 256)
+        self.make_zero = False
+        self.make_first =  True
+        self.make_sincurl_pic = True
+        self.make_floodfill_pic = True
+        self.MAX_EPOCHS = 200  # 这两个参数在这个项目工程中是无用的
+        self.WARMUP_EPOCHS = 15
