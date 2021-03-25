@@ -48,7 +48,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler, transform_tr, tr
                 optimizer=optimizer,
                 scheduler=scheduler,
                 use_gpu=cfg.use_gpu,
-                label_smooth=cfg.loss.softmax.label_smooth
+                label_smooth=cfg.loss.softmax.label_smooth,
                 transform_tr = transform_tr,
                 transform_te = transform_te
             )
