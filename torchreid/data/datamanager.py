@@ -7,6 +7,24 @@ from torchreid.data.datasets import init_image_dataset, init_video_dataset
 from torchreid.data.preprocessing import ValTransform, MultiTransform
 
 
+def train_collate_fn(batch):
+    """
+    # collate_fn这个函数的输入就是一个list，list的长度是一个batch size，list中的每个元素都是__getitem__得到的结果
+    """
+    imgs, pids, _, _, = zip(*batch)
+    # pids = torch.tensor(pids, dtype=torch.int64)
+
+    # return torch.stack(imgs, dim=0), pids
+    return list(imgs), list(pids)
+
+
+def val_collate_fn(batch):
+    imgs, pids, camids, img_paths = zip(*batch)
+    return list(imgs), pids, camids, img_paths
+    # return torch.stack(imgs, dim=0), pids, camids, img_paths
+
+
+
 class DataManager(object):
     r"""Base data manager.
 
@@ -220,7 +238,8 @@ class ImageDataManager(DataManager):
             shuffle=False,
             num_workers=workers,
             pin_memory=self.use_gpu,
-            drop_last=True
+            drop_last=True,
+            collate_fn=train_collate_fn 
         )
 
         self.train_loader_t = None
@@ -261,7 +280,8 @@ class ImageDataManager(DataManager):
                 shuffle=False,
                 num_workers=workers,
                 pin_memory=self.use_gpu,
-                drop_last=True
+                drop_last=True,
+                collate_fn=train_collate_fn 
             )
 
         print('=> Loading test (target) dataset')
@@ -299,7 +319,8 @@ class ImageDataManager(DataManager):
                 shuffle=False,
                 num_workers=workers,
                 pin_memory=self.use_gpu,
-                drop_last=False
+                drop_last=False,
+                collate_fn = val_collate_fn
             )
 
             # build gallery loader
@@ -321,7 +342,8 @@ class ImageDataManager(DataManager):
                 shuffle=False,
                 num_workers=workers,
                 pin_memory=self.use_gpu,
-                drop_last=False
+                drop_last=False,
+                collate_fn = val_collate_fn
             )
 
             self.test_dataset[name]['query'] = queryset.query
