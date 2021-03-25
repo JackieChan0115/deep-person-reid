@@ -33,8 +33,8 @@ class Engine(object):
         self.writer = None
         self.epoch = 0
 
-        self.transform_tr = transform_tr
-        self.transform_te = transform_te
+        self.transform_tr = None
+        self.transform_te = None
 
         self.model = None
         self.optimizer = None
