@@ -60,7 +60,9 @@ class ImageSoftmaxEngine(Engine):
         optimizer,
         scheduler=None,
         use_gpu=True,
-        label_smooth=True
+        label_smooth=True,
+        transform_tr = None,
+        transform_te = None
     ):
         super(ImageSoftmaxEngine, self).__init__(datamanager, use_gpu)
 
@@ -68,6 +70,8 @@ class ImageSoftmaxEngine(Engine):
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
+        self.transform_tr = transform_tr
+        self.transform_te = transform_te
 
         self.criterion = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,
@@ -77,6 +81,7 @@ class ImageSoftmaxEngine(Engine):
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
+        imgs, pids = self.transform_tr(imgs, pids)
 
         if self.use_gpu:
             imgs = imgs.cuda()

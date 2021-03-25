@@ -5,6 +5,7 @@ import argparse
 import torch
 import torch.nn as nn
 import os
+from torchreid.data.preprocessing import ValTransform, MultiTransform
 
 import torchreid
 from torchreid.utils import (
@@ -18,6 +19,19 @@ from default_config import (
 )
 
 
+class TransformParams(object):
+
+    def __init__(self):
+        self.INPUTSIZE = (128, 256)
+        self.make_zero = False
+        self.make_first =  True
+        self.make_sincurl_pic = True
+        self.make_floodfill_pic = True
+        self.MAX_EPOCHS = 200  # 这两个参数在这个项目工程中是无用的
+        self.WARMUP_EPOCHS = 15
+
+
+
 def build_datamanager(cfg):
     if cfg.data.type == 'image':
         return torchreid.data.ImageDataManager(**imagedata_kwargs(cfg))
@@ -25,7 +39,7 @@ def build_datamanager(cfg):
         return torchreid.data.VideoDataManager(**videodata_kwargs(cfg))
 
 
-def build_engine(cfg, datamanager, model, optimizer, scheduler):
+def build_engine(cfg, datamanager, model, optimizer, scheduler, transform_tr, transform_te):
     if cfg.data.type == 'image':
         if cfg.loss.name == 'softmax':
             engine = torchreid.engine.ImageSoftmaxEngine(
@@ -35,6 +49,8 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 scheduler=scheduler,
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
+                transform_tr = transform_tr,
+                transform_te = transform_te
             )
 
         else:
@@ -204,7 +220,14 @@ def main():
     print(
         'Building {}-engine for {}-reid'.format(cfg.loss.name, cfg.data.type)
     )
-    engine = build_engine(cfg, datamanager, model, optimizer, scheduler)
+
+    transform_params = TransformParams()
+
+    transform_tr = MultiTransform(transform_params)
+    transform_te = ValTransform(transform_params)
+
+
+    engine = build_engine(cfg, datamanager, model, optimizer, scheduler, transform_tr, transform_te)
     engine.run(**engine_run_kwargs(cfg))
 
 

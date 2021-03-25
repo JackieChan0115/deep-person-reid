@@ -33,6 +33,9 @@ class Engine(object):
         self.writer = None
         self.epoch = 0
 
+        self.transform_tr = transform_tr
+        self.transform_te = transform_te
+
         self.model = None
         self.optimizer = None
         self.scheduler = None
@@ -362,6 +365,7 @@ class Engine(object):
             f_, pids_, camids_ = [], [], []
             for batch_idx, data in enumerate(data_loader):
                 imgs, pids, camids = self.parse_data_for_eval(data)
+                imgs, _ = self.transform_te(imgs, pids)
                 if self.use_gpu:
                     imgs = imgs.cuda()
                 end = time.time()
