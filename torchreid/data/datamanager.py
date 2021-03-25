@@ -11,19 +11,24 @@ def train_collate_fn(batch):
     """
     # collate_fn这个函数的输入就是一个list，list的长度是一个batch size，list中的每个元素都是__getitem__得到的结果
     """
-    imgs, pids, _, _, = zip(*batch)
-    # pids = torch.tensor(pids, dtype=torch.int64)
+    imgs, pids = [],[]
 
-    # return torch.stack(imgs, dim=0), pids
+    for item in batch:
+        imgs.append(item['img'])
+        pids.append(item["pid"])
+
     return list(imgs), list(pids)
 
 
 def val_collate_fn(batch):
-    imgs, pids, camids, img_paths = zip(*batch)
-    return list(imgs), pids, camids, img_paths
-    # return torch.stack(imgs, dim=0), pids, camids, img_paths
+    imgs, pids, camids = [], [], []
 
+    for item in batch:
+        imgs.append(item['img'])
+        pids.append(item["pid"])
+        camids.append(item["camid"])
 
+    return list(imgs), list(pids), list(camids)
 
 class DataManager(object):
     r"""Base data manager.

@@ -243,9 +243,10 @@ class Engine(object):
 
         self.num_batches = len(self.train_loader)
         end = time.time()
-        for self.batch_idx, data in enumerate(self.train_loader):
+        for self.batch_idx, (imgs, pids) in enumerate(self.train_loader):
             data_time.update(time.time() - end)
-            loss_summary = self.forward_backward(data)
+            imgs, pids = self.transform_tr(imgs, pids)
+            loss_summary = self.forward_backward(imgs, pids)
             batch_time.update(time.time() - end)
             losses.update(loss_summary)
 
@@ -289,7 +290,7 @@ class Engine(object):
 
         self.update_lr()
 
-    def forward_backward(self, data):
+    def forward_backward(self, imgs, pids):
         raise NotImplementedError
 
     def test(
@@ -363,8 +364,7 @@ class Engine(object):
 
         def _feature_extraction(data_loader):
             f_, pids_, camids_ = [], [], []
-            for batch_idx, data in enumerate(data_loader):
-                imgs, pids, camids = self.parse_data_for_eval(data)
+            for batch_idx, (imgs, pids, camids) in enumerate(data_loader):
                 imgs, _ = self.transform_te(imgs, pids)
                 if self.use_gpu:
                     imgs = imgs.cuda()
@@ -446,16 +446,16 @@ class Engine(object):
     def extract_features(self, input):
         return self.model(input)
 
-    def parse_data_for_train(self, data):
-        imgs = data['img']
-        pids = data['pid']
-        return imgs, pids
+    # def parse_data_for_train(self, data):
+    #     # imgs = data['img']
+    #     # pids = data['pid']
+    #     return imgs, pids
 
-    def parse_data_for_eval(self, data):
-        imgs = data['img']
-        pids = data['pid']
-        camids = data['camid']
-        return imgs, pids, camids
+    # def parse_data_for_eval(self, data):
+    #     imgs = data['img']
+    #     pids = data['pid']
+    #     camids = data['camid']
+    #     return imgs, pids, camids
 
     def two_stepped_transfer_learning(
         self, epoch, fixbase_epoch, open_layers, model=None
