@@ -104,7 +104,8 @@ def reset_config(cfg, args):
 
     dataset_dict = {
         "market1501":{
-            "root":"/home/jiayansong/Dataset/",
+            # "root":"/home/jiayansong/Dataset/", yansong
+            "root" : "/home/cl/disk/datasets", # k80
             "targets":"market1501"
         }
     }
