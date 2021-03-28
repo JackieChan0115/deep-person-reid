@@ -41,7 +41,7 @@ class MSMT17(ImageDataset):
     def __init__(self, root='', **kwargs):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
-        self.download_dataset(self.dataset_dir, self.dataset_url)
+        # self.download_dataset(self.dataset_dir, self.dataset_url)
 
         has_main_dir = False
         for main_dir in VERSION_DICT:

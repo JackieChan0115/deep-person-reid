@@ -182,7 +182,8 @@ class MultiTransform(object):
                 random.shuffle(indexs)
                 for j in range(len(indexs)):
                     img_id1 = indexs[j]
-                    random_imgids = [pid_dic[shuffle_pids[self.getRandom(shuffle_pids,pid)]][j]  for _ in range(1)]
+                    # random_imgids = [pid_dic[shuffle_pids[self.getRandom(shuffle_pids,pid)]][j]  for _ in range(1)]
+                    random_imgids = [pid_dic[shuffle_pids[self.getRandom(shuffle_pids, pid)]][0] for _ in range(1)]
                     imgs3[img_id1]=self.floodfill(imgs3[img_id1], imgs0, random_imgids)
 
         ans = []

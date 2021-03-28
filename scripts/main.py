@@ -106,6 +106,10 @@ def reset_config(cfg, args):
         "market1501":{
             "root":"/home/jiayansong/Dataset/",
             "targets":"market1501"
+        },
+        "msmt17":{
+            "root":"/data1/jiayansong/",
+            "targets":"msmt17"
         }
     }
 
