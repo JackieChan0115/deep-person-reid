@@ -5,9 +5,12 @@ import argparse
 import torch
 import torch.nn as nn
 import os
-from torchreid.data.preprocessing import ValTransform, MultiTransform
+
+sys.path.insert(0, "./")
 
 import torchreid
+from torchreid.data.preprocessing import ValTransform, MultiTransform
+
 from torchreid.utils import (
     Logger, check_isfile, set_random_seed, collect_env_info,
     resume_from_checkpoint, load_pretrained_weights, compute_model_complexity
@@ -104,7 +107,8 @@ def reset_config(cfg, args):
 
     dataset_dict = {
         "market1501":{
-            "root":"/home/jiayansong/Dataset/",
+            # "root":"/home/jiayansong/Dataset/", yansong
+            "root" : "/home/cl/disk/datasets", # k80
             "targets":"market1501"
         },
         "msmt17":{
