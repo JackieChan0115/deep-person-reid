@@ -33,7 +33,7 @@ class CUHK03(ImageDataset):
     ):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
-        self.download_dataset(self.dataset_dir, self.dataset_url)
+        # self.download_dataset(self.dataset_dir, self.dataset_url)
 
         self.data_dir = osp.join(self.dataset_dir, 'cuhk03_release')
         self.raw_mat_path = osp.join(self.data_dir, 'cuhk-03.mat')

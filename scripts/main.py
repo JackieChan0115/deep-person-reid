@@ -114,6 +114,10 @@ def reset_config(cfg, args):
         "msmt17":{
             "root":"/data1/jiayansong/",
             "targets":"msmt17"
+        },
+        "cuhk03":{
+            "root":"/data1/jiayansong/",
+            "target":"cuhk03"
         }
     }
 
