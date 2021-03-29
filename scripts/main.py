@@ -117,7 +117,7 @@ def reset_config(cfg, args):
         },
         "cuhk03":{
             "root":"/data1/jiayansong/",
-            "target":"cuhk03"
+            "targets":"cuhk03"
         }
     }
 
